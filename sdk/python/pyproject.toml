@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rundown-workers"
+version = "0.1.0"
+description = "Lightweight workflow executor SDK for Python"
+authors = [
+    { name = "Ernest", email = "ernestdior5050@gmail.com" }
+]
+dependencies = [
+    "requests",
+]
+requires-python = ">=3.7"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rundown_workers*"]
