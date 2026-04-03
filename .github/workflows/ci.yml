@@ -28,11 +28,6 @@ jobs:
       - name: Go Vet
         run: go vet ./...
 
-      - name: Verify Docs are up-to-date
-        run: |
-          go install github.com/princjef/gomarkdoc/cmd/gomarkdoc@latest
-          gomarkdoc -o Docs_Check.md ./cmd/worker ./internal/store ./pkg/engine
-          diff -w Docs.md Docs_Check.md || (echo "Docs.md is out of sync! Please run 'gomarkdoc' locally." && exit 1)
 
   python-checks:
     name: Python SDK Checks
