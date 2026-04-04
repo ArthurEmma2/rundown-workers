@@ -50,19 +50,20 @@ You must have it installed first, before you can use the SDKs in your project(su
 # if you want to use pre-built binary
 # download from releases
 
-# for linux
+# for linux (replace amd64 with your architecture)
 # run this from your project root
-$ curl -L https://github.com/its-ernest/rundown-workers/releases/download/v0.1.0/engine -o rundown-workers/engine
+$ curl -L https://github.com/its-ernest/rundown-workers/releases/download/v0.1.0/engine-linux-amd64 -o rundown-workers/engine
 
 # for windows
 # run this from your project root
-$ curl -L https://github.com/its-ernest/rundown-workers/releases/download/v0.1.0/engine.exe -o rundown-workers/engine.exe
+$ curl -L https://github.com/its-ernest/rundown-workers/releases/download/v0.1.0/engine-windows-amd64.exe -o rundown-workers/engine.exe
 ```
 
 ```bash
 # if you want manual build
 $ git clone https://github.com/its-ernest/rundown-workers.git
 $ cd rundown-workers
+$ make build
 ```
 
 ### 2. Run the engine
@@ -103,7 +104,7 @@ You can schedule and manage worker jobs in your backend using the SDKs. For inst
 - [Node.js](sdk/nodejs/README.md)
 - [Go](sdk/go/README.md)
 
-# Use cURL as fallbackc for now if your backend is not in the SDK list above
+### Use cURL as fallbackc for now if your backend is not in the SDK list above
 
 ```bash
 # Enqueue a job
