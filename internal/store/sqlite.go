@@ -42,6 +42,12 @@ func NewSQLiteStore(dbPath string) (*SQLiteStore, error) {
 		return nil, err
 	}
 
+	// 1. Concurrency Optimization: WAL Mode
+	// This allows multiple readers (polling workers) while one writer is busy.
+	_, _ = db.Exec("PRAGMA journal_mode=WAL;")
+	_, _ = db.Exec("PRAGMA synchronous=NORMAL;")
+	_, _ = db.Exec("PRAGMA busy_timeout=5000;") // Wait up to 5s instead of failing immediately on lock
+
 	// Clean full schema
 	query := `
 	CREATE TABLE IF NOT EXISTS jobs (

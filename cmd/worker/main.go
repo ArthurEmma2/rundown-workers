@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -36,6 +37,9 @@ type FailRequest struct {
 }
 
 func main() {
+	port := flag.Int("port", 8181, "Port to run the engine on")
+	flag.Parse()
+
 	e := echo.New()
 
 	// Use ONLY existing middlewares in v5
@@ -154,8 +158,8 @@ func main() {
 		}
 	}()
 
-	fmt.Println("Rundown-Workers Engine starting on :8181")
-	if err := e.Start(":8181"); err != nil && err != http.ErrServerClosed {
+	fmt.Printf("Rundown-Workers Engine v0.2.0 starting on :%d\n", *port)
+	if err := e.Start(fmt.Sprintf(":%d", *port)); err != nil && err != http.ErrServerClosed {
 		fmt.Printf("[!] Engine crashed: %v\n", err)
 	}
 }

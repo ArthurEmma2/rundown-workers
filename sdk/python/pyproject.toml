@@ -4,8 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rundown-workers"
-version = "0.1.0"
+version = "0.1.1"
 description = "Lightweight workflow executor SDK for Python"
+readme = "README.md"
+license = { text = "MIT" }
 authors = [
     { name = "Ernest", email = "ernestdior5050@gmail.com" }
 ]
@@ -13,6 +15,11 @@ dependencies = [
     "requests",
 ]
 requires-python = ">=3.7"
+
+[project.urls]
+"Homepage" = "https://github.com/its-ernest/rundown-workers"
+"Bug Tracker" = "https://github.com/its-ernest/rundown-workers/issues"
+"Documentation" = "https://github.com/its-ernest/rundown-workers/blob/main/sdk/python/README.md"
 
 [tool.setuptools.packages.find]
 where = ["."]
