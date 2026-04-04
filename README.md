@@ -43,42 +43,125 @@ Communication happens over HTTP, making the system language-agnostic.
 
 ## Installation
 
-### 1. Clone repository
+### 1. Install Rundown Workers
+You must have it installed first, before you can use the SDKs in your project(such as Python package, Go package, Node.js package, etc).
 
+```bash
+# if you want to use pre-built binary
+# download from releases
+
+# for linux
+# run this from your project root
+$ curl -L https://github.com/its-ernest/rundown-workers/releases/download/v0.1.0/engine -o rundown-workers/engine
+
+# for windows
+# run this from your project root
+$ curl -L https://github.com/its-ernest/rundown-workers/releases/download/v0.1.0/engine.exe -o rundown-workers/engine.exe
 ```
-git clone https://github.com/yourusername/rundown-workers.git
-cd rundown-workers
+
+```bash
+# if you want manual build
+$ git clone https://github.com/its-ernest/rundown-workers.git
+$ cd rundown-workers
 ```
 
 ### 2. Run the engine
 
+```bash
+# if you don't have go installed
+# download rundown-workers binary from releases
+# and run this command
+
+$ ./rundown-workers/engine # on linux
+$ ./rundown-workers/engine.exe # on windows
 ```
-go run cmd/worker/main.go
+
+```bash
+# manual builds
+# if you have go installed
+$ git clone https://github.com/yourusername/rundown-workers.git
+$ cd rundown-workers
+$ go run cmd/worker/main.go
 ```
 
 The server starts at:
 
-```
+```bash
 http://localhost:8181
+
+# if you want to change port
+$ ./rundown-workers/engine --port 8080
 ```
 
 ---
 
-## Basic Usage
+## SDKs
+
+You can schedule and manage worker jobs in your backend using the SDKs. For instance, if your backend is in Python, you can use the Python SDK to schedule and manage worker jobs.
+
+- [Python](sdk/python/README.md)
+- [Node.js](sdk/nodejs/README.md)
+- [Go](sdk/go/README.md)
+
+# Use cURL as fallbackc for now if your backend is not in the SDK list above
+
+```bash
+# Enqueue a job
+curl -X POST http://localhost:8181/enqueue \
+-H "Content-Type: application/json" \
+-d '{
+  "queue": "post_worker",
+  "payload": "Hello from Rundown"
+}'
+
+# Poll for a job
+curl -X POST http://localhost:8181/poll \
+-H "Content-Type: application/json" \
+-d '{
+  "queue": "post_worker"
+}'
+
+# Mark job as complete
+curl -X POST http://localhost:8181/complete \
+-H "Content-Type: application/json" \
+-d '{
+  "id": "job-id"
+}'
+
+# Mark job as failed
+curl -X POST http://localhost:8181/fail \
+-H "Content-Type: application/json" \
+-d '{
+  "id": "job-id"
+}'
+```
+
+## Basic Usage (example in Python sdk)
 
 ### Step 1 — Define a Worker (Python)
 
 ```python
 import rundown_workers as rw
 
-@rw.queue(name="post_worker", host="http://localhost:8181")
+# This task will fail if it takes longer than 2 seconds
+rw.enqueue(queue="greetings", payload="Hello!", timeout=2)
+
+# This task will retry 3 times if it fails
+rw.enqueue(queue="greetings", payload="Hello!", max_retries=3)
+
+# This task will retry 3 times if it fails and will time out after 2 seconds
+rw.enqueue(queue="greetings", payload="Hello!", timeout=2, max_retries=3)
+
+# This actively fetches and executes jobs
+@rw.queue(name="greetings", host="http://localhost:8181")
 def run_work(payload):
     print("Processing:", payload)
+    return True
 ```
 
 Run the worker:
 
-```
+```bash
 python worker.py
 ```
 
@@ -88,7 +171,7 @@ This starts a background process that continuously polls for jobs.
 
 ### Step 2 — Enqueue a Job
 
-```
+```bash
 curl -X POST http://localhost:8181/enqueue \
 -H "Content-Type: application/json" \
 -d '{
@@ -218,7 +301,7 @@ MIT
 
 ---
 
-## Final Note
+## Idea behind this project
 
 Rundown-Workers is not designed to compete with complex workflow engines.
 
